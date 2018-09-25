@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "WorldConstants.h"
 
 using namespace sf;
 
@@ -22,7 +21,7 @@ private:
 	int m_tileSize;
 
 	// Which directions is the player currently moving in
-	WorldConstants::direction m_direction;
+	WorldConstants::Direction m_direction;
 	/* bool m_upPressed;
 	bool m_downPressed;
 	bool m_leftPressed;
@@ -60,7 +59,7 @@ public:
 	// send a copy of the sprite to main
 	Sprite getSprite();
 
-	void moveDirection(WorldConstants::direction);
+	void moveDirection(WorldConstants::Direction);
 	/*void moveLeft();
 	void moveRight();
 	void moveUp();

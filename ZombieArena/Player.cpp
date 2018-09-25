@@ -5,7 +5,7 @@ using namespace WorldConstants;
 
 Player::Player() {
 	resetHealth();	
-	m_direction = direction::STAND_BY;
+	m_direction = Direction::STAND_BY;
 
 	// associate a texture with the sprite
 	m_texture.loadFromFile("graphics/player.png");
@@ -47,7 +47,7 @@ void Player::spawn(IntRect arena, Vector2f resolution, int tileSeize) {
 void Player::resetPlayerStats() {
 	resetHealth();
 
-	m_direction = direction::STAND_BY;
+	m_direction = Direction::STAND_BY;
 }
 
 Time Player::getLastHitTime() {
@@ -86,22 +86,22 @@ int Player::getHealth() {
 	return m_health;
 }
 
-void Player::moveDirection(direction direction) {
+void Player::moveDirection(Direction direction) {
 	m_direction = direction;
 }
 
 void Player::update(float elapsedTime, Vector2i mousePosition) {
 	switch (m_direction) {
-		case direction::UP:
+		case Direction::UP:
 			m_position.y -= m_speed * elapsedTime;
 			break;
-		case direction::DOWN:
+		case Direction::DOWN:
 			m_position.y += m_speed * elapsedTime;
 			break;
-		case direction::LEFT:
+		case Direction::LEFT:
 			m_position.x -= m_speed * elapsedTime;
 			break;
-		case direction::RIGHT:
+		case Direction::RIGHT:
 			m_position.x += m_speed * elapsedTime;
 			break;
 		default:
