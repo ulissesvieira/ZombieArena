@@ -18,7 +18,7 @@ private:
 	Clock clock;
 
 	// how long has the PLAYING state been active
-	Time getTimeTotal;
+	Time gameTimeTotal;
 	//  where is the mouse in relation to world coordinates
 	Vector2f mouseWorldPosition;
 	//  where is the mouse in relation to screen coordinates
@@ -28,6 +28,8 @@ private:
 	IntRect arena;	
 
 	void handleInput();
+	void update();
+	void draw();
 public:
 	World();
 	~World();

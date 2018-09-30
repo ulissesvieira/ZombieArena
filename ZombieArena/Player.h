@@ -8,7 +8,7 @@ class Player
 {
 private:
 	// where is the player
-	Vector2f m_position;
+	Vector2i m_position;
 
 	Sprite m_sprite;
 	Texture m_texture;
@@ -41,7 +41,7 @@ public:
 	Player();
 	~Player();
 
-	void spawn(IntRect, Vector2f, int);
+	void spawn(IntRect, Vector2i, int);
 
 	// call this at the end of every game
 	void resetPlayerStats();
@@ -53,7 +53,7 @@ public:
 	// where is the player
 	FloatRect getPosition();
 	// where is the center of the player 
-	Vector2f getCenter();
+	Vector2i getCenter();
 	// which angle is the player facing
 	float getRotation();
 	// send a copy of the sprite to main

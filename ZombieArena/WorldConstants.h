@@ -1,5 +1,13 @@
 #pragma once
 
+#ifdef _DEBUG
+#include <iostream>
+#define D(x) x
+#else
+#define D(x)
+#endif // DEBUG
+
+
 namespace WorldConstants {
 	const float PLAYER_START_SPEED = 200.0;
 	const float PLAYER_START_HEALTH = 100.0;

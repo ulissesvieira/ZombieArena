@@ -25,7 +25,7 @@ void Player::resetHealth() {
 	m_maxHealth = PLAYER_START_HEALTH;
 }
 
-void Player::spawn(IntRect arena, Vector2f resolution, int tileSeize) {
+void Player::spawn(IntRect arena, Vector2i resolution, int tileSeize) {
 	// place the player in the middle of the arena
 	m_position.x = arena.width / 2;
 	m_position.y = arena.height / 2;
@@ -70,7 +70,7 @@ FloatRect Player::getPosition() {
 	return m_sprite.getGlobalBounds();
 }
 
-Vector2f Player::getCenter() {
+Vector2i Player::getCenter() {
 	return m_position;
 }
 
@@ -108,7 +108,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition) {
 			break;
 	}
 
-	m_sprite.setPosition(m_position);
+	m_sprite.setPosition(m_position.x, m_position.y);
 
 	// keep the player in the arena
 	if (m_position.x > m_arena.width - m_tileSize) {
