@@ -26,10 +26,13 @@ private:
 
 	Player player;
 	IntRect arena;	
+	Texture textureBackground;
+	VertexArray background;
 
 	void handleInput();
 	void update();
 	void draw();
+	void initTexture();
 public:
 	World();
 	~World();

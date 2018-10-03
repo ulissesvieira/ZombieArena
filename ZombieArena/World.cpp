@@ -1,19 +1,22 @@
 #include "pch.h"
 #include "World.h"
+#include "CreateBackground.h"
 
 World::World()
 {
 	// start with game over state
-	state = State::GAME_OVER;
+	state = State::PLAYING;
 
 	// get the screen resolution and create an SFML window
-	resolution.x = 800; // VideoMode::getDesktopMode().width;
-	resolution.y = 600; // VideoMode::getDesktopMode().height;
+	resolution.x = VideoMode::getDesktopMode().width;
+	resolution.y = VideoMode::getDesktopMode().height;
 
-	window.create(VideoMode(resolution.x, resolution.y), "Zombie Arena", Style::Default);
+	window.create(VideoMode(resolution.x, resolution.y), "Zombie Arena", Style::Fullscreen);
 
 	// create an SFML Viwq for the main action
 	mainView.reset(FloatRect(0, 0, (float) resolution.x, (float) resolution.y));
+
+	initTexture();
 
 	// the main game loop
 	while (window.isOpen()) {
@@ -124,9 +127,12 @@ void World::handleInput() {
 			arena.top = 0;
 
 			// we will modify this line of code later
-			int titleSize = 50;
+			//int titleSize = 50;
+			// pass the vertex array by reference to the background function
+			int tileSize = createBackground(background, arena);
+
 			// spawn the player int the middle of the arena
-			player.spawn(arena, resolution, titleSize);
+			player.spawn(arena, resolution, tileSize);
 			// reset the clock so there isn't a frame jump
 			clock.restart();
 		}
@@ -172,6 +178,9 @@ void World::draw() {
 		// and draw everything related to it
 		window.setView(mainView);
 
+		// draw the background
+		window.draw(background, &textureBackground);
+
 		// draw the player
 		window.draw(player.getSprite());
 
@@ -180,4 +189,8 @@ void World::draw() {
 	default:
 		break;
 	}	
+}
+
+void World::initTexture() {
+	textureBackground.loadFromFile("graphics/background_sheet.png");
 }
