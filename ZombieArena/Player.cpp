@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Player.h"
+#include "TextureHolder.h"
 
 using namespace WorldConstants;
 
@@ -10,6 +11,9 @@ Player::Player() {
 	// associate a texture with the sprite
 	m_texture.loadFromFile("graphics/player.png");
 	m_sprite.setTexture(m_texture);
+
+	//m_texture = TextureHolder::getTexture("graphics/player.png");
+
 	// set the origin of the sprite to the centre
 	// for smooth rotation
 	m_sprite.setOrigin(25, 25);

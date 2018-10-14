@@ -19,11 +19,19 @@ namespace WorldConstants {
 	const int TILE_TYPES = 3;
 	const int VERTS_IN_QUAD = 4;
 
+	const float PI = 3.141;
+
+	const int NUMBER_ZOMBIES = 20;
+
 	enum class Direction {
 		STAND_BY, LEFT, RIGHT, UP, DOWN
 	};
 
 	enum class State {
 		PAUSED, LEVELING_UP, GAME_OVER, PLAYING
+	};
+
+	enum class ZombieType {
+		BLOATER, CHASER, CRAWLER
 	};
 }

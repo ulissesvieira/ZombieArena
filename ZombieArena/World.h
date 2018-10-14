@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 #include "Player.h"
+#include "TextureHolder.h"
+#include "Zombie.h"
 
 using namespace sf;
 using namespace WorldConstants;
@@ -29,10 +31,17 @@ private:
 	Texture textureBackground;
 	VertexArray background;
 
+	// prepare for a horde of zombies
+	int numZombies;
+	int numZombiesAlive;
+	//Zombie *zombies = nullptr;
+	std::shared_ptr<Zombie> zombies;
+
+	TextureHolder holder;
+
 	void handleInput();
 	void update();
 	void draw();
-	void initTexture();
 public:
 	World();
 	~World();

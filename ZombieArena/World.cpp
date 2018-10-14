@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "World.h"
-#include "CreateBackground.h"
+#include "Utils.h"
 
 World::World()
 {
@@ -16,7 +16,7 @@ World::World()
 	// create an SFML Viwq for the main action
 	mainView.reset(FloatRect(0, 0, (float) resolution.x, (float) resolution.y));
 
-	initTexture();
+	textureBackground = TextureHolder::getTexture("graphics/background_sheet.png");
 
 	// the main game loop
 	while (window.isOpen()) {
@@ -133,6 +133,13 @@ void World::handleInput() {
 
 			// spawn the player int the middle of the arena
 			player.spawn(arena, resolution, tileSize);
+
+			// create a harde of zombies
+			numZombies = WorldConstants::NUMBER_ZOMBIES;
+			zombies.reset();
+			zombies = createHorde(numZombies, arena);
+			numZombiesAlive = numZombies;
+
 			// reset the clock so there isn't a frame jump
 			clock.restart();
 		}
@@ -154,11 +161,17 @@ void World::update() {
 
 		// update the player
 		player.update(dtAsSeconds, mouseScreenPosition);
-		// make the view centre around the player
-		mainView.setCenter((float) player.getCenter().x, (float) player.getCenter().y);
-
 		// make a note of the players new position
-		Vector2i playerPosition(player.getCenter());
+		Vector2f playerPosition(player.getCenter().x, player.getCenter().y);
+		// make the view centre around the player
+		mainView.setCenter(playerPosition);
+
+		// loop through each zombie and update them
+		for (int i = 0; i < numZombies; i++) {
+			if (zombies.get()[i].isAlive()) {				
+				zombies.get()[i].update(dt.asSeconds(), playerPosition);
+			}
+		}		
 	}
 }
 
@@ -181,6 +194,11 @@ void World::draw() {
 		// draw the background
 		window.draw(background, &textureBackground);
 
+		// loop through each zombie and update them
+		for (int i = 0; i < numZombies; i++) {
+			window.draw(zombies.get()[i].getSprite());
+		}
+
 		// draw the player
 		window.draw(player.getSprite());
 
@@ -189,8 +207,4 @@ void World::draw() {
 	default:
 		break;
 	}	
-}
-
-void World::initTexture() {
-	textureBackground.loadFromFile("graphics/background_sheet.png");
 }
