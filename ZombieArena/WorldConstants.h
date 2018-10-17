@@ -22,6 +22,9 @@ namespace WorldConstants {
 	const float PI = 3.141;
 
 	const int NUMBER_ZOMBIES = 20;
+	const float BULLET_SPEED = 1000.0f;
+	const float BULLET_MAX_RANGE = 1000.0f;
+	const int NUMBER_BULLETS = 100;
 
 	enum class Direction {
 		STAND_BY, LEFT, RIGHT, UP, DOWN

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "TextureHolder.h"
 #include "Zombie.h"
+#include "Bullet.h"
 
 using namespace sf;
 using namespace WorldConstants;
@@ -38,6 +39,18 @@ private:
 	std::shared_ptr<Zombie> zombies;
 
 	TextureHolder holder;
+
+	Bullet bullets[WorldConstants::NUMBER_BULLETS];
+	int currentBullet = 0;
+	int bulletsSpare = 24;
+	int bulletsInClip = 6;
+	int clipSize = 6;
+	float fireRate = 1.0f;
+	// when was the fire button last pressed?
+	Time lastPressed;
+
+	Sprite spriteCrosshair;
+	Texture textureCrosshair;
 
 	void handleInput();
 	void update();
