@@ -5,6 +5,7 @@
 #include "TextureHolder.h"
 #include "Zombie.h"
 #include "Bullet.h"
+#include "Pickup.h"
 
 using namespace sf;
 using namespace WorldConstants;
@@ -49,8 +50,15 @@ private:
 	// when was the fire button last pressed?
 	Time lastPressed;
 
-	Sprite spriteCrosshair;
-	Texture textureCrosshair;
+	//Sprite spriteCrosshair;
+	//Texture textureCrosshair;
+	
+	Pickup healthPickup;
+	Pickup ammoPickup;
+
+	// about the game
+	int score = 0;
+	int hiScore = 0;
 
 	void handleInput();
 	void update();

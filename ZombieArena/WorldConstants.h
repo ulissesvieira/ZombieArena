@@ -26,6 +26,11 @@ namespace WorldConstants {
 	const float BULLET_MAX_RANGE = 1000.0f;
 	const int NUMBER_BULLETS = 100;
 
+	const int HEALTH_START_VALUE = 50;
+	const int AMMO_START_VALUE = 12;
+	const int START_WAIT_TIME = 10;
+	const int START_SECONDS_TO_LIVE = 5;
+
 	enum class Direction {
 		STAND_BY, LEFT, RIGHT, UP, DOWN
 	};
@@ -36,5 +41,9 @@ namespace WorldConstants {
 
 	enum class ZombieType {
 		BLOATER, CHASER, CRAWLER
+	};
+
+	enum class PickupType {
+		HEALTH = 1, AMMO = 2
 	};
 }

@@ -6,12 +6,15 @@ World::World()
 {
 	// start with game over state
 	state = State::PLAYING;
+	
+	healthPickup.setType(PickupType::HEALTH);
+	ammoPickup.setType(PickupType::AMMO);
 
 	// hide the mouse pointer and replace it with crosshair
 	window.setMouseCursorVisible(false);
-	textureCrosshair = TextureHolder::getTexture("graphics/crosshair.png");
-	spriteCrosshair.setTexture(textureCrosshair);
-	spriteCrosshair.setOrigin(25, 25);
+	/*textureCrosshair = TextureHolder::getTexture("graphics/crosshair.png");
+	/*spriteCrosshair.setTexture(textureCrosshair);
+	spriteCrosshair.setOrigin(25, 25);*/
 
 	// get the screen resolution and create an SFML window
 	resolution.x = VideoMode::getDesktopMode().width;
@@ -169,6 +172,10 @@ void World::handleInput() {
 		// spawn the player int the middle of the arena
 		player.spawn(arena, resolution, tileSize);
 
+		// configure the pickups
+		healthPickup.setArena(arena);
+		ammoPickup.setArena(arena);
+
 		// create a harde of zombies
 		numZombies = WorldConstants::NUMBER_ZOMBIES;
 		zombies.reset();
@@ -201,12 +208,14 @@ void World::update() {
 		mainView.setCenter(playerPosition);
 
 		// set the crosshair to the mouse world location
-		spriteCrosshair.setPosition(mouseWorldPosition);
+		//spriteCrosshair.setPosition(mouseWorldPosition);
 
 		// loop through each zombie and update them
 		for (int i = 0; i < numZombies; i++) {
-			if (zombies.get()[i].isAlive()) {				
-				zombies.get()[i].update(dt.asSeconds(), playerPosition);
+			auto currentZombie = zombies.get()[i];
+
+			if (currentZombie.isAlive()) {
+				currentZombie.update(dt.asSeconds(), playerPosition);
 			}
 		}
 
@@ -215,6 +224,66 @@ void World::update() {
 			if (bullets[i].isInFlight()) {
 				bullets[i].update(dtAsSeconds);
 			}
+		}
+
+		// update the pickups
+		healthPickup.update(dtAsSeconds);
+		ammoPickup.update(dtAsSeconds);
+
+		// Collision detection
+		// Have any zombies been shot?
+		for (int i = 0; i < 100; i++) {
+			for (int j = 0; j < numZombies; j++) {
+				auto currentZombie = zombies.get()[j];
+
+				if (bullets[i].isInFlight() && currentZombie.isAlive()) {
+					if (bullets[i].getPosition().intersects(currentZombie.getPosition())) {
+						// Stop the bullet
+						bullets[i].stop();
+
+						// Register the hit and see if it was a kill
+						if (currentZombie.hit()) {
+							// Not just a hit but a kill too
+							score += 10;
+							if (score >= hiScore) {
+								hiScore = score;
+							}
+
+							numZombiesAlive--;
+
+							// When all the zombies are dead (again)
+							if (numZombiesAlive == 0) {
+								state = State::LEVELING_UP;
+							}
+						}
+					}
+				}
+			}
+		} // End zombie being shot
+
+		// Have any zombies touched the player			
+		for (int i = 0; i < numZombies; i++) {
+			auto currentZombie = zombies.get()[i];
+
+			if (player.getPosition().intersects(currentZombie.getPosition()) && currentZombie.isAlive()) {
+				if (player.hit(gameTimeTotal)) {
+					// More here later
+				}
+
+				if (player.getHealth() <= 0) {
+					state = State::GAME_OVER;
+				}
+			}
+		} // End player touched
+
+		// Has the player touched health pickup
+		if (player.getPosition().intersects(healthPickup.getPosition()) && healthPickup.isSpawned()) {
+			player.increaseHealthLevel(healthPickup.gotIt());
+		}
+
+		// Has the player touched ammo pickup
+		if (player.getPosition().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned()) {
+			bulletsSpare += ammoPickup.gotIt();
 		}
 	}
 }
@@ -252,8 +321,17 @@ void World::draw() {
 		// draw the player
 		window.draw(player.getSprite());
 
+		// draw the pickups, if currently spawned
+		if (healthPickup.isSpawned()) {
+			window.draw(healthPickup.getSprite());
+		}
+
+		if (ammoPickup.isSpawned()) {
+			window.draw(ammoPickup.getSprite());
+		}
+
 		// draw the crosshair
-		window.draw(spriteCrosshair);
+		//window.draw(spriteCrosshair);
 
 		window.display();
 		break;
